@@ -9,7 +9,10 @@ RUN mvn --batch-mode --define java.net.useSystemProxies=true package
 ########################################################################################
 
 FROM jetty:9.4-jre11
-MAINTAINER D.Ducatel
+
+MAINTAINER colbygk@scratch.mit.edu
+
+COPY plantuml.ini /var/lib/jetty/start.d/plantuml.ini
 
 USER root
 
@@ -20,6 +23,7 @@ RUN apt-get update && \
 USER jetty
 
 ENV GRAPHVIZ_DOT=/usr/bin/dot
+ENV ALLOW_PLANTUML_INCLUDE=true
 
 ARG BASE_URL=ROOT
 COPY --from=builderjetty /app/target/plantuml.war /var/lib/jetty/webapps/$BASE_URL.war
